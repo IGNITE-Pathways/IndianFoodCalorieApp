@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can only access their own data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Food scans belong to users
+    match /users/{userId}/foodScans/{scanId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // User meals and history
+    match /users/{userId}/meals/{mealId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Shared food database (read-only for all authenticated users)
+    match /foods/{foodId} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only admins can write via functions
+    }
+    
+    // Nutritional data (read-only)
+    match /nutrition/{nutritionId} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only functions can write
+    }
+    
+    // User achievements
+    match /users/{userId}/achievements/{achievementId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Anonymous function to validate food data
+    function isValidFoodData(data) {
+      return data.keys().hasAll(['name', 'calories', 'protein', 'carbohydrates', 'fat']) &&
+             data.calories is number && data.calories >= 0 &&
+             data.protein is number && data.protein >= 0 &&
+             data.carbohydrates is number && data.carbohydrates >= 0 &&
+             data.fat is number && data.fat >= 0;
+    }
+    
+    // Anonymous function to validate user data
+    function isValidUserData(data) {
+      return data.keys().hasAll(['name', 'email', 'age', 'weight', 'height']) &&
+             data.age is number && data.age > 0 && data.age < 150 &&
+             data.weight is number && data.weight > 0 &&
+             data.height is number && data.height > 0;
+    }
+  }
+}
