@@ -1,0 +1,37 @@
+{
+  "classes": [
+    "biryani",
+    "dosa",
+    "idli",
+    "samosa",
+    "butter_chicken",
+    "naan",
+    "roti",
+    "dal",
+    "curry",
+    "paneer",
+    "tandoori_chicken",
+    "masala_dosa",
+    "pulao",
+    "paratha",
+    "poha",
+    "upma",
+    "vada",
+    "uttapam",
+    "dhokla",
+    "kachori",
+    "pav_bhaji",
+    "chole",
+    "rajma",
+    "aloo_gobi",
+    "palak_paneer"
+  ],
+  "num_classes": 25,
+  "splits": [
+    "train",
+    "validation",
+    "test"
+  ],
+  "description": "Indian Food Recognition Dataset for Core ML",
+  "created_for": "IndianFoodCalorieApp"
+}
